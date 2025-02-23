@@ -1,55 +1,84 @@
+<!-- Cabecera del contenido -->
 <ion-header [translucent]="true">
-
   <ion-toolbar>
-    <ion-title>
-      Gráficos
-    </ion-title>
+    <ion-title>Gráficos</ion-title>
   </ion-toolbar>
 
-  <ion-segment value="tipoDeChartSeleccionado" [(ngModel)]="tipoDeChartSeleccionado"  (ionChange)="segmentChanged($event)">
-
-    <ion-segment-button value="bar-chart">
-      Bar Chart
-    </ion-segment-button>
-
-    <ion-segment-button value="line-chart">
-      Line Chart
-    </ion-segment-button>
-
-    <ion-segment-button value="pie-chart">
-      Pie Chart
-    </ion-segment-button>
-
+  <!-- Segmento para seleccionar el tipo de gráfico -->
+  <ion-segment value="tipoDeChartSeleccionado" [(ngModel)]="tipoDeChartSeleccionado" (ionChange)="segmentChanged($event)" style="background-color: white">
+    <ion-segment-button value="bar-chart">Bar Chart</ion-segment-button>
+    <ion-segment-button value="line-chart">Line Chart</ion-segment-button>
+    <ion-segment-button value="pie-chart">Pie Chart</ion-segment-button>
   </ion-segment>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-
-  <!-- Mostrar u ocultar componentes según el segmento seleccionado -->
+  <!-- Segmento Bar Chart -->
   <ion-grid *ngIf="tipoDeChartSeleccionado === 'bar-chart'">
     <ion-row>
+      <!-- Primera columna -->
       <ion-col size="6">
-        <app-bar-chart [tipoChartSelected]="tipoDeChartSeleccionado" [borderColorCategorias]="borderColorCat" [backgroundColorCategorias]="backgroundColorCat"></app-bar-chart>
+        <!-- Bar Chart card -->
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Bar Chart</ion-card-title>
+          </ion-card-header>
+          <ion-card-content style="margin: 20px;">
+            <app-bar-chart [numCategorias]="categorias.length" [borderColorCategorias]="borderColorCat" [backgroundColorCategorias]="backgroundColorCat"></app-bar-chart>
+          </ion-card-content>
+        </ion-card>
       </ion-col>
+
+      <!-- Segunda columna -->
       <ion-col size="6">
         <ion-row>
           <ion-col size="12">
-            <app-line-chart></app-line-chart>
+            <!-- Line Chart card -->
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>Line Chart</ion-card-title>
+              </ion-card-header>
+              <ion-card-content style="margin: 20px;">
+                <app-line-chart [nameTab]="tipoDeChartSeleccionado" [borderColorCategorias]="borderColorCat" [backgroundColorCategorias]="backgroundColorCat"></app-line-chart>
+              </ion-card-content>
+            </ion-card>
           </ion-col>
         </ion-row>
         <ion-row>
           <ion-col size="12">
-            <app-pie-chart></app-pie-chart>
+            <!-- Pie Chart card -->
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>Pie Chart</ion-card-title>
+              </ion-card-header>
+              <ion-card-content style="margin: 20px;">
+                <app-pie-chart [nameTab]="tipoDeChartSeleccionado" [borderColorCategorias]="borderColorCat" [backgroundColorCategorias]="backgroundColorCat"></app-pie-chart>
+              </ion-card-content>
+            </ion-card>
           </ion-col>
         </ion-row>
       </ion-col>
     </ion-row>
   </ion-grid>
 
-  <!--En el segmento "Line-Chart" mostraremos únicamente su correspondiente gráfica-->
-  <app-line-chart *ngIf="tipoDeChartSeleccionado === 'line-chart'"></app-line-chart>
+  <!-- Segmento Line Chart -->
+  <ion-card *ngIf="tipoDeChartSeleccionado === 'line-chart'">
+    <ion-card-header>
+      <ion-card-title>Line Chart</ion-card-title>
+    </ion-card-header>
+    <ion-card-content style="margin: 20px;">
+      <app-line-chart [nameTab]="tipoDeChartSeleccionado" [borderColorCategorias]="borderColorCat" [backgroundColorCategorias]="backgroundColorCat"></app-line-chart>
+    </ion-card-content>
+  </ion-card>
 
-  <!--En el segmento "Pie-Chart" mostraremos únicamente su correspondiente gráfica-->
-<app-pie-chart *ngIf="tipoDeChartSeleccionado === 'pie-chart'"></app-pie-chart>
+  <!-- Segmento Pie Chart -->
+  <ion-card *ngIf="tipoDeChartSeleccionado === 'pie-chart'">
+    <ion-card-header>
+      <ion-card-title>Pie Chart</ion-card-title>
+    </ion-card-header>
+    <ion-card-content style="margin: 20px;">
+      <app-pie-chart [nameTab]="tipoDeChartSeleccionado" [borderColorCategorias]="borderColorCat" [backgroundColorCategorias]="backgroundColorCat"></app-pie-chart>
+    </ion-card-content>
+  </ion-card>
 
 </ion-content>
