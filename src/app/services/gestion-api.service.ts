@@ -31,7 +31,6 @@ export class GestionApiService {
 
     //Realizamos la llamada api y la recogemos en un observable de tipo RespuestaNoticias
     let respuesta: Observable<RespuestaNoticias> = this.http.get<RespuestaNoticias>("https://newsapi.org/v2/top-headlines?country=us&category=" + categoria + "&apiKey=" + this.apiKey);
-    console.log("respuesta: " + respuesta);
 
     // Nos suscribimos a la respuesta de la API
     respuesta.subscribe( data => {
@@ -39,7 +38,6 @@ export class GestionApiService {
 
         // Mediante datosSubject.next, avisamos a todos los suscriptores (en este caso datos$) de que hemos recibido un nuevo valor
         this.datosSubject.next({ categoria: categoria, totalResults: data.totalResults });
-        console.log(data);
 
       } else {
         console.error('La propiedad totalResults no está definida en la respuesta:', data);

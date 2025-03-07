@@ -1,5 +1,6 @@
 import { Component, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
 import { Chart, ChartType } from 'chart.js/auto';
+import { Subscription } from 'rxjs';
 import { GestionApiService } from 'src/app/services/gestion-api.service';
 
 @Component({
@@ -23,6 +24,9 @@ export class BarChartComponent  implements OnInit {
   @Input() backgroundColorCategorias: string[] = [];
   @Input() borderColorCategorias: string[] = [];
 
+  // Variable para almacenar la suscripción
+  private datosSubscription!: Subscription;
+
   constructor(
     private el: ElementRef, // Permite acceder a elementos del DOM dentro del componente
     private renderer: Renderer2, // Permite manipular el DOM de forma segura con Angular
@@ -34,16 +38,18 @@ export class BarChartComponent  implements OnInit {
     this.inicializarChart();
 
     // Se suscribe al observable datos$ de tipo BehaviorSubject del servicio gestionApi para recibir datos en tiempo real
-    // Cuando emita un valor, recibiremos una notificación con el nuevo calor
-    this.gestionApi.datos$.subscribe((datos) => {
+    // Cuando emita un valor, recibiremos una notificación con el nuevo valor
+    this.datosSubscription = this.gestionApi.datos$.subscribe((datos) => {
       console.log("Datos recibidos del API:", datos);
 
       // Verificación de los datos recibidos
       if (datos != undefined) {
 
-        // Rellena apiData con los valores recibidos del API
-        this.apiData.push({categoria: datos.categoria, totalResults: datos.totalResults});
-        console.log("apiData actualizado:", this.apiData);
+        // Verifica si la categoría ya está en el array antes de agregarla
+        const exists = this.apiData.some(d => d.categoria === datos.categoria);
+        if (!exists) {
+          this.apiData.push({ categoria: datos.categoria, totalResults: datos.totalResults });
+        }
 
         // Esperamos a recibir todos los datos para actualizar el gráfico
         if (this.apiData.length === this.numCategorias) {
@@ -141,6 +147,12 @@ export class BarChartComponent  implements OnInit {
     // Actualiza el gráfico con los nuevos datos
     this.chart.update(); 
     console.log("Chart actualizado");
+  }
+
+  ngOnDestroy() {
+    if (this.datosSubscription) {
+      this.datosSubscription.unsubscribe();
+    }
   }
   
 }
